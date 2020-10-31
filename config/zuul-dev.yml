@@ -1,0 +1,30 @@
+spring:
+  application:    name: zuul
+    cloud:
+      config:
+        override-none: true
+    
+server:  port: 3001
+  
+eureka:  client:   service-url:      defaultZooe: http://eureka1:2001/eureka,http://eureka2:2002/eureka
+      
+zuul:
+  routes:
+    item-service: /item-service/**
+    user-service: /user-service/**
+    order-service: /order-service/**
+  retryable: true
+ 
+ribbon:  #通用的配置，对所有的服务都有效
+  MaxAutoRetries: 1
+  
+item-service: #这个配合只对item-service这个服务起作用
+  ribbon:
+    MaxAutoRetriesNextServer: 2
+    
+#暴露监控端点   
+management:  endpoints:    web:      exposure:        include: hystrix.stream
+  
+
+ 
+  
